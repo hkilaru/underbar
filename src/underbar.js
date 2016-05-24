@@ -197,7 +197,7 @@
       accumulator = collection[0];
     }
     else {
-    accumulator = iterator(accumulator, item);
+      accumulator = iterator(accumulator, item);
     }
   });
 	return accumulator;
@@ -208,7 +208,7 @@
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
     return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
+      if(wasFound) {
         return true;
       }
       return item === target;
@@ -234,6 +234,15 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if(arguments.length === 1) {
+      iterator = _.identity;
+    }
+    return _.reduce(collection, function(anyTrue, item) {
+      if(iterator(item)) {
+        anyTrue = true;
+      }
+      return anyTrue;
+    }, false)
   };
 
 
@@ -321,8 +330,22 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-  };
+    var memorized = [];
+    var result;
 
+  return function() {
+    var argument = Array.prototype.slice.call(arguments);
+
+    if(argument in memorized) {
+      return memorized[argument];
+    }
+    else {
+      result = func.apply(this, argument);
+      memorized[argument] = result;
+    }
+    return result;
+  };
+};
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
@@ -330,6 +353,11 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments);
+    var funcArgs = args.slice(2, args.length);
+    setTimeout(function() {
+      func.apply(null, funcArgs);
+    }, wait);
   };
 
 
@@ -344,6 +372,18 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var newArray = array.slice(0, array.length);
+    var i;
+    var j;
+    var tempValue;
+    for(i = array.length; i; i--) {
+      j = Math.floor(Math.random() * i);
+      tempValue = newArray[j];
+      newArray[j] = newArray[i-1];
+      newArray[i-1] = tempValue;
+    }
+    console.log(newArray);
+    return newArray;
   };
 
 
