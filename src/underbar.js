@@ -41,10 +41,10 @@
     if(n === undefined) {
       return array[array.length - 1];
     }
-    else if (n == 0) {
+    else if(n == 0) {
       return [];
     }
-    else if (n > array.length) {
+    else if(n > array.length) {
       return array;
     }
     else {
@@ -382,7 +382,6 @@
       newArray[j] = newArray[i-1];
       newArray[i-1] = tempValue;
     }
-    console.log(newArray);
     return newArray;
   };
 
